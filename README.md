@@ -1,8 +1,6 @@
 # Laravel Shopify App
 
 ![Tests](https://github.com/centire/laravel-shopify/workflows/Package%20Test/badge.svg?branch=master)
-[![Coverage](https://coveralls.io/repos/github/centire/laravel-shopify/badge.svg?branch=master)](https://coveralls.io/github/centire/laravel-shopify?branch=master)
-[![License](https://poser.pugx.org/centire/laravel-shopify/license)](https://packagist.org/packages/centire/laravel-shopify)
 
 ----
 
