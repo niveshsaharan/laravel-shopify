@@ -25,7 +25,7 @@ class AuthControllerTest extends TestCase
     public function testAuthRedirectsToShopifyWhenNoCode(): void
     {
         // Run the request
-        $response = $this->post('/authenticate', ['shop' => 'example.myshopify.com']);
+        $response = $this->post('/auth', ['shop' => 'example.myshopify.com']);
 
         // Check the view
         $response->assertViewHas('shopDomain', 'example.myshopify.com');
@@ -49,7 +49,7 @@ class AuthControllerTest extends TestCase
             'timestamp' => '1337178173',
         ];
 
-        $response = $this->call('get', '/authenticate', $hmacParams);
+        $response = $this->call('get', '/auth', $hmacParams);
         $response->assertRedirect();
     }
 
@@ -65,7 +65,7 @@ class AuthControllerTest extends TestCase
             'timestamp' => '1337178173',
         ];
 
-        $response = $this->call('get', '/authenticate', $hmacParams);
+        $response = $this->call('get', '/auth', $hmacParams);
         $response->assertStatus(500);
     }
 
@@ -86,14 +86,14 @@ class AuthControllerTest extends TestCase
             'timestamp' => '1337178173',
         ];
 
-        $response = $this->call('get', '/authenticate', $hmacParams);
+        $response = $this->call('get', '/auth', $hmacParams);
         $response->assertRedirect('http://localhost/orders');
     }
 
     public function testOauthRedirect(): void
     {
         // Run the request
-        $response = $this->call('get', '/authenticate/oauth', ['shop' => 'example.myshopify.com']);
+        $response = $this->call('get', '/auth/oauth', ['shop' => 'example.myshopify.com']);
         $response->assertViewHas(
             'authUrl',
             'https://example.myshopify.com/admin/oauth/authorize?client_id=&scope=read_products%2Cwrite_products&redirect_uri=https%3A%2F%2Flocalhost%2Fauthenticate'

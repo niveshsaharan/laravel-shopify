@@ -38,7 +38,7 @@ Route::group(['prefix' => config('shopify-app.prefix'), 'middleware' => ['web']]
 
     Route::match(
         ['get', 'post'],
-        '/authenticate',
+        '/auth',
         'Osiset\ShopifyApp\Http\Controllers\AuthController@authenticate'
     )
     ->name('authenticate');
@@ -53,7 +53,7 @@ Route::group(['prefix' => config('shopify-app.prefix'), 'middleware' => ['web']]
     */
 
     Route::get(
-        '/authenticate/oauth',
+        '/auth/oauth',
         'Osiset\ShopifyApp\Http\Controllers\AuthController@oauth'
     )
     ->name('authenticate.oauth');
