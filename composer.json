@@ -1,5 +1,5 @@
 {
-    "name": "osiset/laravel-shopify",
+    "name": "centire/laravel-shopify",
     "description": "Shopify package for Laravel to aide in app development",
     "keywords": [
         "laravel",
@@ -11,6 +11,10 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "authors": [
+        {
+            "name": "Nivesh",
+            "email": "hey@nive.sh"
+        },
         {
             "name": "Tyler King",
             "email": "tyler@osiset.com"
