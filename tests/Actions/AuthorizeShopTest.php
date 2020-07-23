@@ -25,7 +25,7 @@ class AuthorizeShopTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            '/admin/oauth/authorize?client_id=&scope=read_products%2Cwrite_products&redirect_uri=https%3A%2F%2Flocalhost%2Fauthenticate',
+            '/admin/oauth/authorize?client_id=&scope=read_products%2Cwrite_products&redirect_uri=https%3A%2F%2Flocalhost%2Fauth',
             $result->url
         );
         $this->assertFalse($result->completed);
@@ -43,7 +43,7 @@ class AuthorizeShopTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            '/admin/oauth/authorize?client_id=&scope=read_products%2Cwrite_products&redirect_uri=https%3A%2F%2Flocalhost%2Fauthenticate',
+            '/admin/oauth/authorize?client_id=&scope=read_products%2Cwrite_products&redirect_uri=https%3A%2F%2Flocalhost%2Fauth',
             $result->url
         );
         $this->assertFalse($result->completed);

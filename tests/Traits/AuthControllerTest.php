@@ -39,7 +39,7 @@ class AuthControllerTest extends TestCase
         $response->assertViewHas('shopDomain', 'example.myshopify.com');
         $response->assertViewHas(
             'authUrl',
-            'https://example.myshopify.com/admin/oauth/authorize?client_id=&scope=read_products%2Cwrite_products&redirect_uri=https%3A%2F%2Flocalhost%2Fauthenticate'
+            'https://example.myshopify.com/admin/oauth/authorize?client_id=&scope=read_products%2Cwrite_products&redirect_uri=https%3A%2F%2Flocalhost%2Fauth'
         );
     }
 
@@ -104,7 +104,7 @@ class AuthControllerTest extends TestCase
         $response = $this->call('get', '/auth/oauth', ['shop' => 'example.myshopify.com']);
         $response->assertViewHas(
             'authUrl',
-            'https://example.myshopify.com/admin/oauth/authorize?client_id=&scope=read_products%2Cwrite_products&redirect_uri=https%3A%2F%2Flocalhost%2Fauthenticate'
+            'https://example.myshopify.com/admin/oauth/authorize?client_id=&scope=read_products%2Cwrite_products&redirect_uri=https%3A%2F%2Flocalhost%2Fauth'
         );
     }
 }
