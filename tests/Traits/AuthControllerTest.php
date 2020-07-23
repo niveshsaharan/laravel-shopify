@@ -22,6 +22,14 @@ class AuthControllerTest extends TestCase
         $this->shopSession = $this->app->make(ShopSession::class);
     }
 
+    public function testAuthShowsLoginPageWhenNoShop(): void
+    {
+        $response = $this->get('/auth');
+        $response
+            ->assertStatus(200)
+            ->assertViewIs('shopify-app::auth.index');
+    }
+
     public function testAuthRedirectsToShopifyWhenNoCode(): void
     {
         // Run the request

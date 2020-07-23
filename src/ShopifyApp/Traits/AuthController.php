@@ -29,6 +29,11 @@ trait AuthController
      */
     public function authenticate(Request $request, AuthenticateShop $authenticateShop)
     {
+        if(!$request->get('shop'))
+        {
+            return view('shopify-app::auth.index');
+        }
+
         // Get the shop domain
         $shopDomain = ShopDomain::fromNative($request->get('shop'));
 
