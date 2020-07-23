@@ -29,8 +29,7 @@ trait AuthController
      */
     public function authenticate(Request $request, AuthenticateShop $authenticateShop)
     {
-        if(!$request->get('shop'))
-        {
+        if (!$request->get('shop')) {
             return view('shopify-app::auth.index');
         }
 
