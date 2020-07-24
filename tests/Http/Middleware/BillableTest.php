@@ -98,7 +98,7 @@ class BillableTest extends TestCase
         $this->assertTrue($result[1]);
     }
 
-    private function runBillable(Closure $cb = null): array
+    private function runBillable(\Closure $cb = null): array
     {
         $called = false;
         $response = ($this->app->make(BillableMiddleware::class))->handle(Request::instance(), function ($request) use (&$called, $cb) {
