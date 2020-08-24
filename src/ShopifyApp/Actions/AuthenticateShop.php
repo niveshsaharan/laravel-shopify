@@ -78,7 +78,14 @@ class AuthenticateShop
         AfterAuthorize $afterAuthorizeAction
     ) {
         $this->shopSession = $shopSession;
-        $this->apiHelper = $apiHelper;
+
+        if ($this->shopSession->getShop()) {
+            $this->apiHelper = $shopSession->getShop()->apiHelper();
+        } else {
+            $this->apiHelper = $apiHelper;
+            $this->apiHelper->make();
+        }
+
         $this->authorizeShopAction = $authorizeShopAction;
         $this->dispatchScriptsAction = $dispatchScriptsAction;
         $this->dispatchWebhooksAction = $dispatchWebhooksAction;
@@ -106,7 +113,6 @@ class AuthenticateShop
         }
 
         // Determine if the HMAC is correct
-        $this->apiHelper->make();
         if (!$this->apiHelper->verifyRequest($request->all())) {
             // Throw exception, something is wrong
             return [$result, null];

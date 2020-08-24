@@ -45,8 +45,13 @@ class AuthShopify
     public function __construct(IApiHelper $apiHelper, ShopSession $shopSession)
     {
         $this->shopSession = $shopSession;
-        $this->apiHelper = $apiHelper;
-        $this->apiHelper->make();
+
+        if ($shopSession->getShop()) {
+            $this->apiHelper = $shopSession->getShop()->apiHelper();
+        } else {
+            $this->apiHelper = $apiHelper;
+            $this->apiHelper->make();
+        }
     }
 
     /**
