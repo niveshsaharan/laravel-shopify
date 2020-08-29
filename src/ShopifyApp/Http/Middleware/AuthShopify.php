@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
+use Osiset\ShopifyApp\Contracts\Queries\Shop as IShopQuery;
 use Osiset\ShopifyApp\Services\ShopSession;
 use Osiset\ShopifyApp\Objects\Enums\DataSource;
 use Osiset\ShopifyApp\Objects\Values\ShopDomain;
@@ -35,6 +36,13 @@ class AuthShopify
     protected $shopSession;
 
     /**
+     * The shop query helper.
+     *
+     * @var IShopQuery
+     */
+    protected $shopQuery;
+
+    /**
      * Constructor.
      *
      * @param IApiHelper  $apiHelper   The API helper.
@@ -42,9 +50,10 @@ class AuthShopify
      *
      * @return self
      */
-    public function __construct(IApiHelper $apiHelper, ShopSession $shopSession)
+    public function __construct(IApiHelper $apiHelper, ShopSession $shopSession, IShopQuery $shopQuery)
     {
         $this->shopSession = $shopSession;
+        $this->shopQuery = $shopQuery;
 
         if ($shopSession->getShop()) {
             $this->apiHelper = $shopSession->getShop()->apiHelper();
@@ -70,6 +79,16 @@ class AuthShopify
     {
         // Grab the domain and check the HMAC (if present)
         $domain = $this->getShopDomainFromData($request);
+
+        if (! $domain->isNull() && ! $this->shopSession->getShop()) {
+            $shop = $this->shopQuery->getByDomain($domain);
+
+            if ($shop) {
+                // Generate api helper from shop
+                $this->apiHelper = $shop->apiHelper();
+            }
+        }
+
         $hmac = $this->verifyHmac($request);
 
         $checks = [];
