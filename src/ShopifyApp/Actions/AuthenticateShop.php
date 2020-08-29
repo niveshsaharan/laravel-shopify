@@ -3,6 +3,7 @@
 namespace Osiset\ShopifyApp\Actions;
 
 use Illuminate\Http\Request;
+use Osiset\ShopifyApp\Contracts\Queries\Shop as IShopQuery;
 use Osiset\ShopifyApp\Services\ShopSession;
 use Osiset\ShopifyApp\Actions\AfterAuthorize;
 use Osiset\ShopifyApp\Actions\DispatchScripts;
@@ -58,6 +59,13 @@ class AuthenticateShop
     protected $afterAuthorizeAction;
 
     /**
+     * The shop query helper.
+     *
+     * @var IShopQuery
+     */
+    protected $shopQuery;
+
+    /**
      * Setup.
      *
      * @param ShopSession      $shopSession            The shop session handler.
@@ -75,9 +83,11 @@ class AuthenticateShop
         AuthorizeShop $authorizeShopAction,
         DispatchScripts $dispatchScriptsAction,
         DispatchWebhooks $dispatchWebhooksAction,
-        AfterAuthorize $afterAuthorizeAction
+        AfterAuthorize $afterAuthorizeAction,
+        IShopQuery $shopQuery
     ) {
         $this->shopSession = $shopSession;
+        $this->shopQuery = $shopQuery;
 
         if ($this->shopSession->getShop()) {
             $this->apiHelper = $shopSession->getShop()->apiHelper();
@@ -103,6 +113,16 @@ class AuthenticateShop
     {
         // Setup
         $shopDomain = ShopDomain::fromNative($request->get('shop'));
+
+        if (! $shopDomain->isNull() && ! $this->shopSession->getShop()) {
+            $shop = $this->shopQuery->getByDomain($shopDomain);
+
+            if ($shop) {
+                // Generate api helper from shop
+                $this->apiHelper = $shop->apiHelper();
+            }
+        }
+
         $code = $request->get('code');
 
         // Run the check

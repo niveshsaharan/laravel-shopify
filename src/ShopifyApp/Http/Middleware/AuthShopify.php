@@ -47,6 +47,7 @@ class AuthShopify
      *
      * @param IApiHelper  $apiHelper   The API helper.
      * @param ShopSession $shopSession The shop session helper.
+     * @param IShopQuery $shopQuery The shop session helper.
      *
      * @return self
      */

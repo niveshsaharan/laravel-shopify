@@ -143,7 +143,8 @@ class ShopifyAppProvider extends ServiceProvider
                     $app->make(AuthorizeShopAction::class),
                     $app->make(DispatchScriptsAction::class),
                     $app->make(DispatchWebhooksAction::class),
-                    $app->make(AfterAuthorizeAction::class)
+                    $app->make(AfterAuthorizeAction::class),
+                    $app->make(IShopQuery::class)
                 );
             }],
             GetPlanUrlAction::class => [self::CBIND, function ($app) {
