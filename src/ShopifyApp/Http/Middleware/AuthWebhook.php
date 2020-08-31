@@ -5,6 +5,8 @@ namespace Osiset\ShopifyApp\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Osiset\ShopifyApp\Contracts\Queries\Shop as IShopQuery;
+use Osiset\ShopifyApp\Objects\Values\ShopDomain;
 use Osiset\ShopifyApp\Traits\ConfigAccessible;
 
 use function Osiset\ShopifyApp\createHmac;
@@ -27,11 +29,21 @@ class AuthWebhook
     public function handle(Request $request, Closure $next)
     {
         $hmac = $request->header('x-shopify-hmac-sha256') ?: '';
-        $shop = $request->header('x-shopify-shop-domain');
-        $data = $request->getContent();
-        $hmacLocal = createHmac(['data' => $data, 'raw' => true, 'encode' => true], $this->getConfig('api_secret'));
+        $shopDomain = $request->header('x-shopify-shop-domain');
+        $apiSecret= $this->getConfig('api_secret');
 
-        if (!hash_equals($hmac, $hmacLocal) || empty($shop)) {
+        if ($shopDomain) {
+            $shop = resolve(IShopQuery::class)->getByDomain(ShopDomain::fromNative($shopDomain));
+
+            if ($shop) {
+                $apiSecret = $shop->apiHelper()->getApi()->getOptions()->getApiSecret();
+            }
+        }
+
+        $data = $request->getContent();
+        $hmacLocal = createHmac(['data' => $data, 'raw' => true, 'encode' => true], $apiSecret);
+
+        if (!hash_equals($hmac, $hmacLocal) || empty($shopDomain)) {
             // Issue with HMAC or missing shop header
             return Response::make('Invalid webhook signature.', 401);
         }
