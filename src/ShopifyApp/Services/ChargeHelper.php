@@ -262,7 +262,7 @@ class ChargeHelper
         $transfer->name = $plan->name;
         $transfer->price = $plan->price;
         $transfer->interval = $plan->getInterval()->toNative();
-        $transfer->test = $plan->isTest();
+        $transfer->test = $plan->isTest() || $shop->isTester();
         $transfer->trialDays = $this->determineTrialDaysRemaining($plan, $shop);
         $transfer->cappedAmount = $isCapped ? $plan->capped_amount : null;
         $transfer->terms = $isCapped ? $plan->terms : null;

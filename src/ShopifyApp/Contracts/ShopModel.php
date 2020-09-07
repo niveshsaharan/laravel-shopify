@@ -59,6 +59,13 @@ interface ShopModel extends Authenticatable
     public function isGrandfathered(): bool;
 
     /**
+     * Checks is shop is a tester
+     *
+     * @return bool
+     */
+    public function isTester(): bool;
+
+    /**
      * Checks if the shop is freemium.
      *
      * @return bool

@@ -103,6 +103,14 @@ trait ShopModel
     /**
      * {@inheritdoc}
      */
+    public function isTester(): bool
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isFreemium(): bool
     {
         return ((bool) $this->shopify_freemium) === true;

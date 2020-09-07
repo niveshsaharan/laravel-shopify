@@ -26,6 +26,7 @@ class ShopModelTest extends TestCase
         $this->assertInstanceOf(ShopDomain::class, $shop->getDomain());
         $this->assertInstanceOf(AccessToken::class, $shop->getToken());
         $this->assertFalse($shop->isGrandfathered());
+        $this->assertFalse($shop->isTester());
         $this->assertFalse($shop->isFreemium());
         $this->assertEquals(0, $shop->charges->count());
         $this->assertFalse($shop->hasCharges());
