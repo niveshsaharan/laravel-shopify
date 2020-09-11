@@ -57,7 +57,7 @@ trait ShopModel
      */
     public function getDomain(): ShopDomainValue
     {
-        return ShopDomain::fromNative($this->name);
+        return ShopDomain::fromNative($this->shopify_domain);
     }
 
     /**
@@ -65,7 +65,7 @@ trait ShopModel
      */
     public function getToken(): AccessTokenValue
     {
-        return AccessToken::fromNative($this->password);
+        return AccessToken::fromNative($this->shopify_token);
     }
 
     /**

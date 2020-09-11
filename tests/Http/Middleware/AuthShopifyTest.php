@@ -24,7 +24,7 @@ class AuthShopifyTest extends TestCase
     public function testQueryInput(): void
     {
         // Create the shop
-        factory($this->model)->create(['name' => 'mystore123.myshopify.com']);
+        factory($this->model)->create(['shopify_domain' => 'mystore123.myshopify.com']);
 
         // Run the middleware
         $currentRequest = Request::instance();
@@ -99,7 +99,7 @@ class AuthShopifyTest extends TestCase
     public function testReferer(): void
     {
         // Create the shop
-        factory($this->model)->create(['name' => 'example.myshopify.com']);
+        factory($this->model)->create(['shopify_domain' => 'example.myshopify.com']);
 
         // Run the middleware
         $currentRequest = Request::instance();
@@ -129,7 +129,7 @@ class AuthShopifyTest extends TestCase
     public function testHeaders(): void
     {
         // Create the shop
-        factory($this->model)->create(['name' => 'example.myshopify.com']);
+        factory($this->model)->create(['shopify_domain' => 'example.myshopify.com']);
 
         // Run the middleware
         $currentRequest = Request::instance();
@@ -168,7 +168,7 @@ class AuthShopifyTest extends TestCase
         $shop = factory($this->model)->create();
 
         // Now, remove its token to make it invalid
-        $shop->password = '';
+        $shop->shopify_token = '';
         $shop->save();
         $shop->refresh();
 

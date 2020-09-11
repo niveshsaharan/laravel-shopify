@@ -48,9 +48,11 @@ class Shop implements ShopCommand
     {
         $model = $this->model;
         $shop = new $model();
-        $shop->name = $domain->toNative();
-        $shop->password = $token->isNull() ? '' : $token->toNative();
+        $shop->name = str_replace('.myshopify.com', '', $domain->toNative());
         $shop->email = "shop@{$domain->toNative()}";
+        $shop->password = '';
+        $shop->shopify_domain = $domain->toNative();
+        $shop->shopify_token = $token->isNull() ? '' : $token->toNative();
         $shop->save();
 
         return $shop->getId();
@@ -74,7 +76,7 @@ class Shop implements ShopCommand
     public function setAccessToken(ShopId $shopId, AccessTokenValue $token): bool
     {
         $shop = $this->getShop($shopId);
-        $shop->password = $token->toNative();
+        $shop->shopify_token = $token->toNative();
 
         return $shop->save();
     }
@@ -85,7 +87,7 @@ class Shop implements ShopCommand
     public function clean(ShopId $shopId): bool
     {
         $shop = $this->getShop($shopId);
-        $shop->password = '';
+        $shop->shopify_token = '';
         $shop->plan_id = null;
 
         return $shop->save();

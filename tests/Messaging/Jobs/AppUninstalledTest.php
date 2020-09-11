@@ -50,6 +50,6 @@ class AppUninstalledTest extends TestCase
         $this->assertTrue($shop->trashed());
         $this->assertFalse($shop->hasCharges());
         $this->assertNull($shop->plan);
-        $this->assertEmpty($shop->password);
+        $this->assertEmpty($shop->shopify_token);
     }
 }
