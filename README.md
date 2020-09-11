@@ -43,6 +43,9 @@ For more information, tutorials, etc., please view the project's [wiki](https://
 
 For full resources on this package, see the [wiki](https://github.com/osiset/laravel-shopify/wiki).
 
+## Changelog
+[Changelog](./CHANGELOG.md)
+
 ## License
 
 This project is released under the MIT [license](https://github.com/niveshsaharan/laravel-shopify/blob/centire/LICENSE).
