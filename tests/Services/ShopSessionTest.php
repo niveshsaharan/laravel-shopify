@@ -2,16 +2,18 @@
 
 namespace Osiset\ShopifyApp\Test\Services;
 
-use Osiset\ShopifyApp\Test\TestCase;
 use Osiset\BasicShopifyAPI\ResponseAccess;
-use Osiset\ShopifyApp\Services\ShopSession;
 use Osiset\ShopifyApp\Objects\Enums\AuthMode;
 use Osiset\ShopifyApp\Objects\Values\ShopDomain;
+use Osiset\ShopifyApp\Services\ShopSession;
+use Osiset\ShopifyApp\Test\TestCase;
 
 class ShopSessionTest extends TestCase
 {
+    /**
+     * @var \Osiset\ShopifyApp\Services\ShopSession
+     */
     protected $shopSession;
-    protected $model;
 
     public function setUp(): void
     {

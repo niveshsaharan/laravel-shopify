@@ -3,8 +3,8 @@
 composer.lock
 vendor/
 build/
-bin/*
 tests/tmp/
+bin/
 .phpunit.result*
 
 # IDE and editor specific files #

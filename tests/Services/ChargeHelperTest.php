@@ -6,15 +6,18 @@ use Illuminate\Support\Carbon;
 use Osiset\BasicShopifyAPI\ResponseAccess;
 use Osiset\ShopifyApp\Objects\Enums\ChargeStatus;
 use Osiset\ShopifyApp\Objects\Transfers\PlanDetails;
-use Osiset\ShopifyApp\Test\TestCase;
-use Osiset\ShopifyApp\Storage\Models\Plan;
 use Osiset\ShopifyApp\Services\ChargeHelper;
 use Osiset\ShopifyApp\Storage\Models\Charge;
+use Osiset\ShopifyApp\Storage\Models\Plan;
 use Osiset\ShopifyApp\Test\Stubs\Api as ApiStub;
+use Osiset\ShopifyApp\Test\TestCase;
 use stdClass;
 
 class ChargeHelperTest extends TestCase
 {
+    /**
+     * @var \Osiset\ShopifyApp\Services\ChargeHelper
+     */
     protected $chargeHelper;
 
     public function setUp(): void
@@ -152,7 +155,7 @@ class ChargeHelperTest extends TestCase
 
         // Create the shop with the plan attached
         $shop = factory($this->model)->create([
-            'plan_id' => $plan->getId()->toNative()
+            'plan_id' => $plan->getId()->toNative(),
         ]);
 
         $result = $this->chargeHelper->details($plan, $shop);
@@ -171,7 +174,7 @@ class ChargeHelperTest extends TestCase
 
         // Create the shop with the plan attached
         $shop = factory($this->model)->create([
-            'plan_id' => $plan->getId()->toNative()
+            'plan_id' => $plan->getId()->toNative(),
         ]);
 
         // Create a charge for the plan and shop
@@ -180,7 +183,7 @@ class ChargeHelperTest extends TestCase
                 [
                     'charge_id' => 12345,
                     'plan_id'   => $plan->getId()->toNative(),
-                    'user_id'   => $shop->getId()->toNative()
+                    'user_id'   => $shop->getId()->toNative(),
                 ],
                 $extraCharge
             )
@@ -189,7 +192,7 @@ class ChargeHelperTest extends TestCase
         return (object) [
             'plan'   => $plan,
             'shop'   => $shop,
-            'charge' => $charge
+            'charge' => $charge,
         ];
     }
 }

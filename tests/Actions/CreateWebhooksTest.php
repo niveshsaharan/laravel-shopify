@@ -3,11 +3,16 @@
 namespace Osiset\ShopifyApp\Test\Actions;
 
 use Osiset\ShopifyApp\Actions\CreateWebhooks;
-use Osiset\ShopifyApp\Test\TestCase;
 use Osiset\ShopifyApp\Test\Stubs\Api as ApiStub;
+use Osiset\ShopifyApp\Test\TestCase;
 
 class CreateWebhooksTest extends TestCase
 {
+    /**
+     * @var \Osiset\ShopifyApp\Actions\CreateWebhooks
+     */
+    protected $action;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -21,8 +26,8 @@ class CreateWebhooksTest extends TestCase
         $webhooks = [
             [
                 'topic'   => 'orders/create',
-                'address' => 'https://localhost/webhooks/orders-create'
-            ]
+                'address' => 'https://localhost/webhooks/orders-create',
+            ],
         ];
         $this->app['config']->set('shopify-app.webhooks', $webhooks);
 
@@ -54,16 +59,16 @@ class CreateWebhooksTest extends TestCase
         $webhooks = [
             [
                 'topic'   => 'orders/create',
-                'address' => 'https://localhost/webhooks/orders-create'
+                'address' => 'https://localhost/webhooks/orders-create',
             ],
             [
                 'topic'   => 'orders/create',
-                'address' => 'https://localhost/webhooks/orders-create-different'
+                'address' => 'https://localhost/webhooks/orders-create-different',
             ],
             [
                 'topic'   => 'app/uninstalled',
-                'address' => 'http://apple.com/uninstall'
-            ]
+                'address' => 'http://apple.com/uninstall',
+            ],
         ];
         $this->app['config']->set('shopify-app.webhooks', $webhooks);
 

@@ -2,11 +2,14 @@
 
 namespace Osiset\ShopifyApp\Test\Traits;
 
-use Osiset\ShopifyApp\Test\TestCase;
 use Osiset\ShopifyApp\Services\ShopSession;
+use Osiset\ShopifyApp\Test\TestCase;
 
 class HomeControllerTest extends TestCase
 {
+    /**
+     * @var \Osiset\ShopifyApp\Services\ShopSession
+     */
     protected $shopSession;
 
     public function setUp(): void

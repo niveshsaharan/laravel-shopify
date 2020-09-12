@@ -2,15 +2,18 @@
 
 namespace Osiset\ShopifyApp\Test\Http\Middleware;
 
-use Osiset\ShopifyApp\Test\TestCase;
 use Illuminate\Support\Facades\Request;
-use Osiset\ShopifyApp\Storage\Models\Plan;
+use Osiset\ShopifyApp\Http\Middleware\Billable as BillableMiddleware;
 use Osiset\ShopifyApp\Services\ShopSession;
 use Osiset\ShopifyApp\Storage\Models\Charge;
-use Osiset\ShopifyApp\Http\Middleware\Billable as BillableMiddleware;
+use Osiset\ShopifyApp\Storage\Models\Plan;
+use Osiset\ShopifyApp\Test\TestCase;
 
 class BillableTest extends TestCase
 {
+    /**
+     * @var \Osiset\ShopifyApp\Services\ShopSession
+     */
     protected $shopSession;
 
     public function setUp(): void
@@ -98,7 +101,11 @@ class BillableTest extends TestCase
         $this->assertTrue($result[1]);
     }
 
-    private function runBillable(\Closure $cb = null): array
+    /**
+     * @param callable|null $cb
+     * @return array
+     */
+    private function runBillable($cb = null): array
     {
         $called = false;
         $response = ($this->app->make(BillableMiddleware::class))->handle(Request::instance(), function ($request) use (&$called, $cb) {
