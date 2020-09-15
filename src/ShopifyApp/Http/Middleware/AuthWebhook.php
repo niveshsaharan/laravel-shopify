@@ -7,9 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Osiset\ShopifyApp\Contracts\Queries\Shop as IShopQuery;
 use Osiset\ShopifyApp\Objects\Values\ShopDomain;
-use Osiset\ShopifyApp\Traits\ConfigAccessible;
-
 use function Osiset\ShopifyApp\createHmac;
+use Osiset\ShopifyApp\Traits\ConfigAccessible;
 
 /**
  * Response for ensuring a proper webhook request.
