@@ -4,17 +4,17 @@ namespace Osiset\ShopifyApp\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
-use Osiset\ShopifyApp\Contracts\Queries\Shop as IShopQuery;
-use Osiset\ShopifyApp\Services\ShopSession;
-use Osiset\ShopifyApp\Objects\Enums\DataSource;
-use Osiset\ShopifyApp\Objects\Values\ShopDomain;
-use Osiset\ShopifyApp\Objects\Values\NullShopDomain;
+use Illuminate\Support\Facades\Session;
 use Osiset\ShopifyApp\Contracts\ApiHelper as IApiHelper;
+use Osiset\ShopifyApp\Contracts\Objects\Values\ShopDomain as ShopDomainValue;
 use Osiset\ShopifyApp\Exceptions\MissingShopDomainException;
 use Osiset\ShopifyApp\Exceptions\SignatureVerificationException;
-use Osiset\ShopifyApp\Contracts\Objects\Values\ShopDomain as ShopDomainValue;
+use Osiset\ShopifyApp\Objects\Enums\DataSource;
+use Osiset\ShopifyApp\Objects\Values\NullShopDomain;
+use Osiset\ShopifyApp\Objects\Values\ShopDomain;
+use Osiset\ShopifyApp\Services\ShopSession;
+use Osiset\ShopifyApp\Contracts\Queries\Shop as IShopQuery;
 
 /**
  * Response for ensuring an authenticated request.
@@ -49,7 +49,7 @@ class AuthShopify
      * @param ShopSession $shopSession The shop session helper.
      * @param IShopQuery $shopQuery The shop session helper.
      *
-     * @return self
+     * @return void
      */
     public function __construct(IApiHelper $apiHelper, ShopSession $shopSession, IShopQuery $shopQuery)
     {
@@ -156,7 +156,7 @@ class AuthShopify
     {
         // Log the shop in
         $status = $this->shopSession->make($domain);
-        if (!$status || !$this->shopSession->isValid()) {
+        if (! $status || ! $this->shopSession->isValid()) {
             // Somethings not right... missing token?
             return false;
         }
@@ -175,7 +175,7 @@ class AuthShopify
     private function verifyShop(Request $request, ShopDomainValue $domain): bool
     {
         // Grab the domain
-        if (!$domain->isNull() && !$this->shopSession->isValidCompare($domain)) {
+        if (! $domain->isNull() && ! $this->shopSession->isValidCompare($domain)) {
             // Somethings not right with the validation
             return false;
         }
@@ -196,7 +196,7 @@ class AuthShopify
         // Ensure Shopify session token is OK
         $incomingToken = $request->query('session');
         if ($incomingToken) {
-            if (!$this->shopSession->isSessionTokenValid($incomingToken)) {
+            if (! $this->shopSession->isSessionTokenValid($incomingToken)) {
                 // Tokens do not match
                 return false;
             }
@@ -210,7 +210,7 @@ class AuthShopify
 
     /**
      * Grab the HMAC value, if present, and how it was found.
-     * Order of precedence is:
+     * Order of precedence is:.
      *
      *  - GET/POST Variable
      *  - Headers
@@ -232,12 +232,12 @@ class AuthShopify
             DataSource::REFERER()->toNative() => function () use ($request): ?string {
                 $url = parse_url($request->header('referer'), PHP_URL_QUERY);
                 parse_str($url, $refererQueryParams);
-                if (!$refererQueryParams || !isset($refererQueryParams['hmac'])) {
+                if (! $refererQueryParams || ! isset($refererQueryParams['hmac'])) {
                     return null;
                 }
 
                 return $refererQueryParams['hmac'];
-            }
+            },
         ];
 
         // Loop through each until we find the HMAC
@@ -250,7 +250,6 @@ class AuthShopify
 
         return null;
     }
-
 
     /**
      * Grab the data.
@@ -314,7 +313,7 @@ class AuthShopify
                 }
 
                 return $verify;
-            }
+            },
         ];
 
         return $options[$source]();
@@ -332,7 +331,7 @@ class AuthShopify
         $options = [
             DataSource::INPUT()->toNative(),
             DataSource::HEADER()->toNative(),
-            DataSource::REFERER()->toNative()
+            DataSource::REFERER()->toNative(),
         ];
         foreach ($options as $option) {
             $result = $this->getData($request, $option);

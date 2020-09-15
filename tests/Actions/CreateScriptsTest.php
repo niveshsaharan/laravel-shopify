@@ -2,12 +2,17 @@
 
 namespace Osiset\ShopifyApp\Test\Actions;
 
-use Osiset\ShopifyApp\Test\TestCase;
 use Osiset\ShopifyApp\Actions\CreateScripts;
 use Osiset\ShopifyApp\Test\Stubs\Api as ApiStub;
+use Osiset\ShopifyApp\Test\TestCase;
 
 class CreateScriptsTest extends TestCase
 {
+    /**
+     * @var \Osiset\ShopifyApp\Actions\CreateScripts
+     */
+    protected $action;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -24,7 +29,7 @@ class CreateScriptsTest extends TestCase
             ],
             [
                 'src' => 'https://js-aplenty.com/bar.js',
-            ]
+            ],
         ];
         $this->app['config']->set('shopify-app.scripttags', $scripts);
 
@@ -44,8 +49,8 @@ class CreateScriptsTest extends TestCase
             $scripts
         );
 
-        $this->assertEquals(0, count($result['created']));
-        $this->assertEquals(0, count($result['deleted']));
+        $this->assertCount(0, $result['created']);
+        $this->assertCount(0, $result['deleted']);
     }
 
     public function testShouldCreateOnlyNewOnesAndDeleteUnusedScripts(): void
@@ -77,12 +82,12 @@ class CreateScriptsTest extends TestCase
             $scripts
         );
 
-        $this->assertEquals(1, count($result['created']));
-        $this->assertEquals(2, count($result['deleted']));
+        $this->assertCount(1, $result['created']);
+        $this->assertCount(2, $result['deleted']);
 
-        $this->assertTrue($result['created'][0]['src'] === 'https://js-aplenty.com/some-new-script.js');
-        $this->assertTrue($result['deleted'][0]['src'] === 'https://js-aplenty.com/bar.js');
-        $this->assertTrue($result['deleted'][1]['src'] === 'https://js-aplenty.com/foo.js');
+        $this->assertSame($result['created'][0]['src'], 'https://js-aplenty.com/some-new-script.js');
+        $this->assertSame($result['deleted'][0]['src'], 'https://js-aplenty.com/bar.js');
+        $this->assertSame($result['deleted'][1]['src'], 'https://js-aplenty.com/foo.js');
     }
 
     public function testShouldCreate(): void
@@ -97,7 +102,7 @@ class CreateScriptsTest extends TestCase
             ],
             [
                 'src' => 'https://js-aplenty.com/bar.js',
-            ]
+            ],
         ];
         $this->app['config']->set('shopify-app.scripttags', $scripts);
 
@@ -105,7 +110,7 @@ class CreateScriptsTest extends TestCase
         $this->setApiStub();
         ApiStub::stubResponses([
             'get_script_tags',
-            'post_script_tags'
+            'post_script_tags',
         ]);
 
         // Create the shop
@@ -118,9 +123,9 @@ class CreateScriptsTest extends TestCase
             $scripts
         );
 
-        $this->assertEquals(1, count($result['created']));
-        $this->assertEquals(0, count($result['deleted']));
+        $this->assertCount(1, $result['created']);
+        $this->assertCount(0, $result['deleted']);
 
-        $this->assertTrue($result['created'][0]['src'] === 'https://js-aplenty.com/foo-bar.js');
+        $this->assertSame($result['created'][0]['src'], 'https://js-aplenty.com/foo-bar.js');
     }
 }

@@ -3,13 +3,18 @@
 namespace Osiset\ShopifyApp\Test\Actions;
 
 use Illuminate\Support\Facades\Queue;
-use Osiset\ShopifyApp\Test\TestCase;
 use Osiset\ShopifyApp\Actions\DispatchScripts;
-use Osiset\ShopifyApp\Test\Stubs\Api as ApiStub;
 use Osiset\ShopifyApp\Messaging\Jobs\ScripttagInstaller;
+use Osiset\ShopifyApp\Test\Stubs\Api as ApiStub;
+use Osiset\ShopifyApp\Test\TestCase;
 
 class DispatchScriptsTest extends TestCase
 {
+    /**
+     * @var \Osiset\ShopifyApp\Actions\DispatchScripts
+     */
+    protected $action;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -45,7 +50,7 @@ class DispatchScriptsTest extends TestCase
         $this->app['config']->set('shopify-app.scripttags', [
             [
                 'src' => 'https://js-aplenty.com/foo.js',
-            ]
+            ],
         ]);
 
         // Setup API stub
@@ -75,7 +80,7 @@ class DispatchScriptsTest extends TestCase
         $this->app['config']->set('shopify-app.scripttags', [
             [
                 'src' => 'https://js-aplenty.com/foo.js',
-            ]
+            ],
         ]);
 
         // Setup API stub
