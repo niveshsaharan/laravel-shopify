@@ -78,6 +78,10 @@ class AuthShopify
      */
     public function handle(Request $request, Closure $next)
     {
+        if ($this->tryLoginWithShopifyJwtToken($request)) {
+            return $next($request);
+        }
+
         // Grab the domain and check the HMAC (if present)
         $domain = $this->getShopDomainFromData($request);
 
@@ -373,5 +377,59 @@ class AuthShopify
             'authenticate.oauth',
             ['shop' => $domain->toNative()]
         );
+    }
+
+    /**
+     * Try login with shopify jwt token if exists
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return bool
+     */
+    private function tryLoginWithShopifyJwtToken(Request $request): bool
+    {
+        if ($request->bearerToken()) {
+            $exploded = explode('.', $request->bearerToken(), 3);
+
+            if (3 == \count($exploded)) {
+                list($header, $payload, $signature) = $exploded;
+
+                $payloadArray = json_decode(base64_decode($payload), true);
+
+                if ($payloadArray['exp'] > now()->utc()->timestamp
+                    && $payloadArray['nbf'] <= now()->utc()->timestamp
+                    && \Illuminate\Support\Str::startsWith($payloadArray['iss'], $payloadArray['dest'])
+                ) {
+                    $shopDomain = \Osiset\ShopifyApp\Objects\Values\ShopDomain::fromNative($payloadArray['dest']);
+
+                    if (! $shopDomain->isNull()) {
+                        $shop = resolve(\Osiset\ShopifyApp\Contracts\Queries\Shop::class)->getByDomain($shopDomain);
+
+                        if ($shop) {
+                            // Generate api helper from shop
+                            $apiHelper = $shop->apiHelper();
+
+                            $apiSecret = $apiHelper->getApi()->getOptions()->getApiSecret();
+
+                            $hmacLocal = rtrim(
+                                strtr(
+                                    base64_encode(
+                                        hash_hmac('sha256', $header.'.'.$payload, $apiSecret, true)
+                                    ),
+                                    '+/',
+                                    '-_'
+                                ),
+                                '='
+                            );
+
+                            if (hash_equals($hmacLocal, $signature)) {
+                                return $this->loginShop($request, $shopDomain);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
