@@ -65,7 +65,7 @@ trait ShopModel
      */
     public function getToken(): AccessTokenValue
     {
-        return AccessToken::fromNative($this->shopify_token);
+        return AccessToken::fromNative($this->shopify_token ?: '');
     }
 
     /**
