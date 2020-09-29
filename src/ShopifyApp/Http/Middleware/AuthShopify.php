@@ -388,8 +388,10 @@ class AuthShopify
      */
     private function tryLoginWithShopifyJwtToken(Request $request): bool
     {
-        if ($request->bearerToken()) {
-            $exploded = explode('.', $request->bearerToken(), 3);
+        $bearerToken = $request->bearerToken() ?: $request->query('token');
+
+        if ($bearerToken) {
+            $exploded = explode('.', $bearerToken, 3);
 
             if (3 == \count($exploded)) {
                 list($header, $payload, $signature) = $exploded;

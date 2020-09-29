@@ -1,3 +1,7 @@
+### 2020-09-29
+
+- Login a user by token (Shopify JWT token) in URL
+
 ### 2020-09-11
 
 Run `php artisan vendor:publish --tag=shopify-migrations && php artisan migrate`
