@@ -398,7 +398,7 @@ class AuthShopify
 
                 $payloadArray = json_decode(base64_decode($payload), true);
 
-                if ($payloadArray['exp'] > now()->utc()->timestamp
+                if ($payloadArray['exp'] >= now()->utc()->timestamp
                     && $payloadArray['nbf'] <= now()->utc()->timestamp
                     && \Illuminate\Support\Str::startsWith($payloadArray['iss'], $payloadArray['dest'])
                 ) {
