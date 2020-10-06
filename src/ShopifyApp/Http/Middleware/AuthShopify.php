@@ -105,6 +105,9 @@ class AuthShopify
 
             // Login the shop and verify their data
             $checks[] = 'loginShop';
+
+            // Dispatch shop login event
+            $checks[] = 'dispatchShopLoginEvent';
         }
 
         // Verify the Shopify session token and verify the shop data
@@ -164,6 +167,21 @@ class AuthShopify
             // Somethings not right... missing token?
             return false;
         }
+
+        return true;
+    }
+
+    /**
+     * Dispatch an event.
+     *
+     * @param Request         $request The request object.
+     * @param ShopDomainValue $domain  The shop domain.
+     *
+     * @return bool
+     */
+    private function dispatchShopLoginEvent(Request $request, ShopDomainValue $domain): bool
+    {
+        event('shop.login', $this->shopSession->getShop());
 
         return true;
     }
