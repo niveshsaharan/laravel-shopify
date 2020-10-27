@@ -2,6 +2,7 @@
 
 namespace Osiset\ShopifyApp\Actions;
 
+use Illuminate\Support\Facades\Session;
 use Osiset\ShopifyApp\Contracts\Commands\Shop as IShopCommand;
 use Osiset\ShopifyApp\Contracts\Queries\Shop as IShopQuery;
 use Osiset\ShopifyApp\Objects\Enums\AuthMode;
@@ -98,11 +99,17 @@ class AuthorizeShop
                 $shop->restore();
             }
 
+            $shouldDispatchShopAuthorizedEvent = $shop->getToken()->isNull() || $shop->getToken()->isEmpty();
+
             // We have a good code, get the access details
             $this->shopSession->make($shop->getDomain());
             $this->shopSession->setAccess($apiHelper->getAccessData($code));
 
             $return['completed'] = true;
+
+            if ($shouldDispatchShopAuthorizedEvent) {
+                event('shop.installed', [$this->shopSession->getShop(), Session::all()]);
+            }
         }
 
         return (object) $return;
